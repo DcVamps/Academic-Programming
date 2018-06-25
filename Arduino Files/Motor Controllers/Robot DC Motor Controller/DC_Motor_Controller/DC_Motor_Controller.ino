@@ -2,6 +2,12 @@
 #include <Wire.h>
 #include "utility/Adafruit_MS_PWMServoDriver.h"
 
+//Analog pins for reading battery voltage
+int batteryGroup1 = A0;
+int batteryGroup2 = A1;
+int battery1Level = 0;
+int battery2Level = 0;
+
 void setup() {
   Adafruit_MotorShield AFMS = Adafruit_MotorShield();
   Adafruit_DCMotor *leftDrive = AFMS.getMotor(1);
@@ -13,11 +19,23 @@ void setup() {
   vacuumDrive->setSpeed(0);
   Wire.begin(50);
   Wire.onReceive(reciveEvent);
+
+  //interupt pin
+  pinMode(1, OUTPUT);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   delay(25);
+
+  battery1Level = analogRead(batteryGroup1);
+  battery1Level = analogRead(batteryGroup2);
+  if(battery1Level <= || battery2Level <= ){
+    digitalWrite(1, HIGH);
+    delay(15);
+    Wire.send("LOWBAT");
+    digitalWrite(1,LOW);
+  }
 }
 
 void reciveEvent(){
@@ -132,6 +150,18 @@ void reciveEvent(){
     rightDrive->setSpeed(0);
     leftDrive->run(FORWARD);
     rightDrive->run(FORWARD);
+  }
+  else if(rec == 0xff){
+    leftDrive->setSpeed(150);
+    rightDrive->setSpeed(150);
+    leftDrive->run(BACKWARD);
+    rightDrive->run(FORWARD);
+    delay();//time it takes to turn 15 degrees
+    leftDrive->setSpeed(0);
+    rightDrive->setSpeed(0);
+    leftDrive->run(FORWARD);
+    rightDrive->run(FORWARD);
+    Wire.send(1)
   }
 }
 
