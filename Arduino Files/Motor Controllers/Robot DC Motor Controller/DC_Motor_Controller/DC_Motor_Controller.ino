@@ -30,7 +30,7 @@ void loop() {
 
   battery1Level = analogRead(batteryGroup1);
   battery1Level = analogRead(batteryGroup2);
-  if(battery1Level <= || battery2Level <= ){
+  if(battery1Level <= 707 || battery2Level <= 707 ){
     digitalWrite(1, HIGH);
     delay(15);
     Wire.send("LOWBAT");
