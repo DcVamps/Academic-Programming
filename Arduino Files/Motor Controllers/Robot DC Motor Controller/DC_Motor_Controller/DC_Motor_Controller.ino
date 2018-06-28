@@ -7,21 +7,21 @@ int batteryGroup1 = A0;
 int batteryGroup2 = A1;
 int battery1Level = 0;
 int battery2Level = 0;
+bool sentLOW = false;
+bool sentHIGH = false;
 
-//global turn times in ms
+Adafruit_MotorShield AFMS = Adafruit_MotorShield();
+Adafruit_DCMotor *leftDrive = AFMS.getMotor(1);
+Adafruit_DCMotor *rightDrive = AFMS.getMotor(3);
+Adafruit_DCMotor *vacuumDrive = AFMS.getMotor(2);
+
 int TIME180 = 25;
-int TIME90150 = 25;
-int TIME45150 = 25;
+int TIME90 = 25;
+int TIME45 = 25;
 int TIME15 = 25;
 
- Adafruit_MotorShield AFMS = Adafruit_MotorShield();
- Adafruit_DCMotor * leftDrive = AFMS.getMotor(1);
- Adafruit_DCMotor * rightDrive = AFMS.getMotor(3);
- Adafruit_DCMotor * vacuumDrive = AFMS.getMotor(2);
-
-
 void setup() {
-   AFMS.begin();
+  AFMS.begin();
   leftDrive->setSpeed(0);
   rightDrive->setSpeed(0);
   vacuumDrive->setSpeed(0);
@@ -29,7 +29,7 @@ void setup() {
   Wire.onReceive(reciveEvent);
 
   //interupt pin
-  pinMode(1, OUTPUT);
+  pinMode(12, OUTPUT);
 }
 
 void loop() {
@@ -38,11 +38,21 @@ void loop() {
 
   battery1Level = analogRead(batteryGroup1);
   battery1Level = analogRead(batteryGroup2);
-  if(battery1Level <= 707 || battery2Level <= 707 ){
-    digitalWrite(1, HIGH);
+  if((battery1Level <= 707 || battery2Level <= 707) && !sentLOW){
+    digitalWrite(12, HIGH);
     delay(15);
-    Wire.write("LOWBAT");
-    digitalWrite(1,LOW);
+    Wire.write("LB");
+    digitalWrite(12,LOW);
+    sentLOW = true;
+    sentHIGH = false;
+  }
+  if((battery1Level >= 860 || battery2Level >= 860) && !sentHIGH){
+    digitalWrite(12, HIGH);
+    delay(15);
+    Wire.write("HB");
+    digitalWrite(12,LOW);
+    sentLOW = false;
+    sentHIGH = true;
   }
 }
 
@@ -92,7 +102,7 @@ void reciveEvent(){
     rightDrive->setSpeed(150);
     leftDrive->run(BACKWARD);
     rightDrive->run(FORWARD);
-    delay(TIME90150);//time it takes to turn 90 degrees
+    delay(TIME90);//time it takes to turn 90 degrees
     leftDrive->setSpeed(0);
     rightDrive->setSpeed(0);
     leftDrive->run(FORWARD);
@@ -105,7 +115,7 @@ void reciveEvent(){
     rightDrive->setSpeed(150);
     leftDrive->run(BACKWARD);
     rightDrive->run(FORWARD);
-    delay(TIME45150);//time it takes to turn 45 degrees
+    delay(TIME45);//time it takes to turn 45 degrees
     leftDrive->setSpeed(0);
     rightDrive->setSpeed(0);
     leftDrive->run(FORWARD);
@@ -118,7 +128,7 @@ void reciveEvent(){
     rightDrive->setSpeed(150);
     leftDrive->run(FORWARD);
     rightDrive->run(BACKWARD);
-    delay(TIME90150);//time it takes to turn 90 degrees
+    delay(TIME90);//time it takes to turn 90 degrees
     leftDrive->setSpeed(0);
     rightDrive->setSpeed(0);
     leftDrive->run(FORWARD);
@@ -131,7 +141,7 @@ void reciveEvent(){
     rightDrive->setSpeed(150);
     leftDrive->run(FORWARD);
     rightDrive->run(BACKWARD);
-    delay(TIME45150);//time it takes to turn 45 degrees
+    delay(TIME45);//time it takes to turn 45 degrees
     leftDrive->setSpeed(0);
     rightDrive->setSpeed(0);
     leftDrive->run(FORWARD);
@@ -159,6 +169,7 @@ void reciveEvent(){
     leftDrive->run(FORWARD);
     rightDrive->run(FORWARD);
   }
+  //special turn 15 for mapping
   else if(rec == 0xff){
     leftDrive->setSpeed(150);
     rightDrive->setSpeed(150);

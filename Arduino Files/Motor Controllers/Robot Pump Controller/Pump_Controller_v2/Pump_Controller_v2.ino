@@ -9,8 +9,8 @@ Servo padPosition;
 
 
 void setup() {
-  padPosition.attach();
-  padPosiiton.write(0);
+  padPosition.attach(2);
+  padPosition.write(0);
   Wire.begin(40);
   Wire.onReceive(reciveEvent);
 
@@ -33,7 +33,7 @@ void reciveEvent(){
   }
   // Turn Pump off, retract cleaning pad
   else if(rec == 0x0){
-    padPosition.write();
+    padPosition.write(0);
     int motorSpeed = map(0, 0, 1023, 0, 100);
     myStepper.setSpeed(motorSpeed);
   }
