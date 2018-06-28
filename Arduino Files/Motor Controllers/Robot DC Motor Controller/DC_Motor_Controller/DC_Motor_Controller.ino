@@ -33,7 +33,7 @@ void loop() {
   if(battery1Level <= 707 || battery2Level <= 707 ){
     digitalWrite(1, HIGH);
     delay(15);
-    Wire.send("LOWBAT");
+    Wire.write("LOWBAT");
     digitalWrite(1,LOW);
   }
 }
@@ -76,7 +76,7 @@ void reciveEvent(){
     rightDrive->setSpeed(0);
     leftDrive->run(FORWARD);
     rightDrive->run(FORWARD);
-    Wire.send(1)
+    Wire.write(1)
   }
   //turn 90 left on the spot
   else if (rec == 0x05){
@@ -89,7 +89,7 @@ void reciveEvent(){
     rightDrive->setSpeed(0);
     leftDrive->run(FORWARD);
     rightDrive->run(FORWARD);
-    Wire.send(1)
+    Wire.write(1)
   }
   //turn 45 left on the spot
   else if (rec == 0x06){
@@ -102,7 +102,7 @@ void reciveEvent(){
     rightDrive->setSpeed(0);
     leftDrive->run(FORWARD);
     rightDrive->run(FORWARD);
-    Wire.send(1)
+    Wire.write(1)
   }
   //turn 90 right on the spot
   else if (rec == 0x07){
@@ -115,7 +115,7 @@ void reciveEvent(){
     rightDrive->setSpeed(0);
     leftDrive->run(FORWARD);
     rightDrive->run(FORWARD);
-    Wire.send(1)
+    Wire.write(1)
   }
   //turn 45 right on the spot
   else if (rec == 0x08){
@@ -128,7 +128,7 @@ void reciveEvent(){
     rightDrive->setSpeed(0);
     leftDrive->run(FORWARD);
     rightDrive->run(FORWARD);
-    Wire.send(1)
+    Wire.write(1)
   }
   //move reverse at normal speed
   else if (rec == 0x09){
@@ -161,7 +161,7 @@ void reciveEvent(){
     rightDrive->setSpeed(0);
     leftDrive->run(FORWARD);
     rightDrive->run(FORWARD);
-    Wire.send(1)
+    Wire.write(1)
   }
 }
 
