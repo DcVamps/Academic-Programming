@@ -66,6 +66,7 @@ def send_wireless_message(message):
     #0x01 = low battery message
     #0x02 = low cleaning fluid
     #0x03 = full vacuum chamber
+    #0x04 = high battery message
     bus.write_byte(WIRELESS_ADDRESS, message)
 
 async def read_wireless_message():
@@ -308,6 +309,11 @@ async def define_map():
     will catch those cases
     **this will be past of testing**
     '''
+    #save map
+
+def checkForMap():
+    #check memory for a saved map
+    return MAP
 
 def returnToBaseStation():
     '''
@@ -326,10 +332,17 @@ def main():
             for tile and hardwood surfaces
 
     '''
-define_map()
+if checkForMap() == False:
+    define_map()
+
 main()
 try:
     GPIO.wait_for_edge(BATTERY_LOW, GPIO.RISING)
     message = bus.read_byte(DC_MOTOR_ADDRESS,1)
-    if message .contains("LOWBAT"):
+    if message .contains("LB"):
         returnToBaseStation()
+    if message.contains{"HB"}:
+        send_wireless_message(0x04)
+
+except:
+    #keybard interrupt
