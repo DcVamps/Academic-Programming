@@ -8,12 +8,20 @@ int batteryGroup2 = A1;
 int battery1Level = 0;
 int battery2Level = 0;
 
+//global turn times in ms
+int TIME180 = 25;
+int TIME90150 = 25;
+int TIME45150 = 25;
+int TIME15 = 25;
+
+ Adafruit_MotorShield AFMS = Adafruit_MotorShield();
+ Adafruit_DCMotor * leftDrive = AFMS.getMotor(1);
+ Adafruit_DCMotor * rightDrive = AFMS.getMotor(3);
+ Adafruit_DCMotor * vacuumDrive = AFMS.getMotor(2);
+
+
 void setup() {
-  Adafruit_MotorShield AFMS = Adafruit_MotorShield();
-  Adafruit_DCMotor *leftDrive = AFMS.getMotor(1);
-  Adafruit_DCMotor *rightDrive = AFMS.getMotor(3);
-  Adafruit_DCMotor *vacuumDrive = AFMS.getMotor(2);
-  AFMS.begin();
+   AFMS.begin();
   leftDrive->setSpeed(0);
   rightDrive->setSpeed(0);
   vacuumDrive->setSpeed(0);
@@ -71,12 +79,12 @@ void reciveEvent(){
     rightDrive->setSpeed(150);
     leftDrive->run(FORWARD);
     rightDrive->run(BACKWARD);
-    delay();//time it takes to turn a complete 180
+    delay(TIME180);//time it takes to turn a complete 180
     leftDrive->setSpeed(0);
     rightDrive->setSpeed(0);
     leftDrive->run(FORWARD);
     rightDrive->run(FORWARD);
-    Wire.write(1)
+    Wire.write(1);
   }
   //turn 90 left on the spot
   else if (rec == 0x05){
@@ -84,12 +92,12 @@ void reciveEvent(){
     rightDrive->setSpeed(150);
     leftDrive->run(BACKWARD);
     rightDrive->run(FORWARD);
-    delay();//time it takes to turn 90 degrees
+    delay(TIME90150);//time it takes to turn 90 degrees
     leftDrive->setSpeed(0);
     rightDrive->setSpeed(0);
     leftDrive->run(FORWARD);
     rightDrive->run(FORWARD);
-    Wire.write(1)
+    Wire.write(1);
   }
   //turn 45 left on the spot
   else if (rec == 0x06){
@@ -97,12 +105,12 @@ void reciveEvent(){
     rightDrive->setSpeed(150);
     leftDrive->run(BACKWARD);
     rightDrive->run(FORWARD);
-    delay();//time it takes to turn 45 degrees
+    delay(TIME45150);//time it takes to turn 45 degrees
     leftDrive->setSpeed(0);
     rightDrive->setSpeed(0);
     leftDrive->run(FORWARD);
     rightDrive->run(FORWARD);
-    Wire.write(1)
+    Wire.write(1);
   }
   //turn 90 right on the spot
   else if (rec == 0x07){
@@ -110,12 +118,12 @@ void reciveEvent(){
     rightDrive->setSpeed(150);
     leftDrive->run(FORWARD);
     rightDrive->run(BACKWARD);
-    delay();//time it takes to turn 90 degrees
+    delay(TIME90150);//time it takes to turn 90 degrees
     leftDrive->setSpeed(0);
     rightDrive->setSpeed(0);
     leftDrive->run(FORWARD);
     rightDrive->run(FORWARD);
-    Wire.write(1)
+    Wire.write(1);
   }
   //turn 45 right on the spot
   else if (rec == 0x08){
@@ -123,12 +131,12 @@ void reciveEvent(){
     rightDrive->setSpeed(150);
     leftDrive->run(FORWARD);
     rightDrive->run(BACKWARD);
-    delay();//time it takes to turn 45 degrees
+    delay(TIME45150);//time it takes to turn 45 degrees
     leftDrive->setSpeed(0);
     rightDrive->setSpeed(0);
     leftDrive->run(FORWARD);
     rightDrive->run(FORWARD);
-    Wire.write(1)
+    Wire.write(1);
   }
   //move reverse at normal speed
   else if (rec == 0x09){
@@ -156,12 +164,12 @@ void reciveEvent(){
     rightDrive->setSpeed(150);
     leftDrive->run(BACKWARD);
     rightDrive->run(FORWARD);
-    delay();//time it takes to turn 15 degrees
+    delay(TIME15);//time it takes to turn 15 degrees
     leftDrive->setSpeed(0);
     rightDrive->setSpeed(0);
     leftDrive->run(FORWARD);
     rightDrive->run(FORWARD);
-    Wire.write(1)
+    Wire.write(1);
   }
 }
 
