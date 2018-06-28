@@ -10,7 +10,7 @@ Servo padPosition;
 
 void setup() {
   padPosition.attach();
-  padPosiiton.write();
+  padPosiiton.write(0);
   Wire.begin(40);
   Wire.onReceive(reciveEvent);
 
@@ -26,7 +26,7 @@ void reciveEvent(){
   byte rec = Wire.read();
   // Turn Pump on, extend cleaning pad
   if(rec == 0x1){
-    padPosition.write();
+    padPosition.write(45);
     int motorSpeed = map(100, 0, 1023, 0, 100);
     myStepper.setSpeed(motorSpeed);
     myStepper.step(stepsPerRevolution / 100);
