@@ -344,5 +344,6 @@ try:
     if message.contains{"HB"}:
         send_wireless_message(0x04)
 
-except:
-    #keybard interrupt
+except KeyboardInterrupt:
+    GPIO.cleanup()
+GPIO.cleanup() 
